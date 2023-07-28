@@ -1,14 +1,11 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 import { ConnectButton, useWallet } from '@suiet/wallet-kit'
-import { JsonRpcProvider, devnetConnection, testnetConnection, mainnetConnection, TransactionBlock } from '@mysten/sui.js';
+import { devnetConnection, testnetConnection, mainnetConnection, JsonRpcProvider, TransactionBlock } from '@mysten/sui.js';
 
 function App() {
 
-  /**
-   * Style
-   */
   const displayBlock = {
     display: 'block'
   }
@@ -17,7 +14,7 @@ function App() {
     display: 'none'
   }
 
-  const wallet = useWallet()
+  const wallet = useWallet();
 
   /**
    * sui fullnode rpc url
@@ -64,9 +61,15 @@ function App() {
 
   const [name, setName] = useState("Test Demo Puddle");
   const [desc, setDesc] = useState("Test Demo Puddle");
-  const [trader, setTrader] = useState(wallet?.account?.address);
+  const [trader, setTrader] = useState("");
   const [commissionPercentage, setCommissionPercentage] = useState("5");
   const [maxSupply, setMaxSupply] = useState("1000");
+
+  useEffect(() => {
+    if (wallet.connected){
+      setTrader(wallet?.account?.address);
+    }
+  }, [wallet.connected]);
 
   // pretty json format
   const jsonFormat = (str) => {
@@ -266,9 +269,9 @@ function App() {
       ];
 
       let args = [
-        txObj.object(objectId),
+        txObj.pure(objectId),
         txObj.pure(Number(maxSupply) * 1000000000),
-        txObj.object(trader),
+        txObj.pure(trader),
         txObj.pure(Number(commissionPercentage)),
         txObj.pure(name),
         txObj.pure(desc),
