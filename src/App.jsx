@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+
 import { ConnectButton, useWallet } from '@suiet/wallet-kit'
 import { JsonRpcProvider, devnetConnection, testnetConnection, mainnetConnection, TransactionBlock } from '@mysten/sui.js';
 
